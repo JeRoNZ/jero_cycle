@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+        xmlns="http://www.concrete5.org/doctrine-xml/0.5"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.concrete5.org/doctrine-xml/0.5 http://concrete5.github.io/doctrine-xml/doctrine-xml-0.5.xsd">
+    <table name="btJeroCycle">
+        <field name="bID" type="integer">
+            <unsigned/>
+            <key/>
+        </field>
+        <field name="timeout" type="integer">
+            <unsigned/>
+        </field>
+        <field name="speed" type="integer">
+            <unsigned/>
+        </field>
+        <field name="effect" type="string" size="20" />
+        <field name="buttonCSS" type="string" size="50" />
+        <field name="sync" type="integer">
+            <unsigned/>
+        </field>
+        <field name="noAnimate" type="integer">
+            <unsigned/>
+        </field>
+        <field name="pause" type="integer">
+            <unsigned/>
+        </field>
+        <field name="button" type="integer">
+            <unsigned/>
+        </field>
+        <field name="swipe" type="integer">
+            <unsigned/>
+        </field>
+        <field name="navigationType" type="integer">
+            <unsigned/>
+            <default value="0"/>
+        </field>
+    </table>
+    <table name="btJeroCycleEntries">
+        <field name="id" type="integer">
+            <unsigned/>
+            <autoincrement/>
+            <key/>
+        </field>
+        <field name="bID" type="integer">
+            <unsigned/>
+        </field>
+        <field name="fID" type="integer">
+            <unsigned/>
+            <default value="0"/>
+        </field>
+        <field name="linkURL" type="string" size="255"/>
+        <field name="internalLinkCID" type="integer">
+            <unsigned/>
+            <default value="0"/>
+        </field>
+        <field name="title" type="string" size="100"/>
+        <field name="description" type="text"/>
+        <field name="buttonText" type="string" size="50"/>
+        <field name="sortOrder" type="integer"/>
+    </table>
+</schema>

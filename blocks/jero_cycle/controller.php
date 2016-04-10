@@ -40,10 +40,6 @@ class Controller extends BlockController {
 			'tileBlind' => 'tileBlind'
 		);
 
-	public function on_start () {
-
-	}
-
 	public function getBlockTypeDescription () {
 		return t("Yet another image slide show, this one uses the amazing responsive cycle2 plugin");
 	}
@@ -54,9 +50,9 @@ class Controller extends BlockController {
 
 	public function getSearchableContent () {
 		$content = '';
-		$db = Database::get();
+		$db = Database::connection();
 		$v = array($this->bID);
-		$q = 'select * from btJeroCycleEntries where bID = ?';
+		$q = 'SELECT * FROM btJeroCycleEntries WHERE bID = ?';
 		$r = $db->query($q, $v);
 		foreach ($r as $row) {
 			$content .= $row['title'] . ' ';
@@ -116,9 +112,11 @@ class Controller extends BlockController {
 
 	public function getEntries () {
 		$db = Database::connection();
-		$r = $db->GetAll('SELECT * from btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+		$r = $db->fetchAll('SELECT * FROM btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
 		// in view mode, linkURL takes us to where we need to go whether it's on our site or elsewhere
 		$rows = array();
+
+		$ratio = false;
 		foreach ($r as $q) {
 			if (!$q['linkURL'] && $q['internalLinkCID']) {
 				$c = Page::getByID($q['internalLinkCID'], 'ACTIVE');
@@ -126,8 +124,18 @@ class Controller extends BlockController {
 				$q['linkPage'] = $c;
 			}
 			$q['description'] = LinkAbstractor::translateFrom($q['description']);
+
+			$fo = File::getByID($q['fID']);
+			if ($fo) {
+				$fv = $fo->getVersion();
+				if (!$ratio) {
+					$ratio = $fv->getAttribute('width') . ':' . $fv->getAttribute('height');
+				}
+				$q['fV'] = $fv;
+			}
 			$rows[] = $q;
 		}
+		$this->set('ratio', $ratio);
 
 		return $rows;
 	}
@@ -136,10 +144,10 @@ class Controller extends BlockController {
 		parent::duplicate($newBID);
 		$db = Database::connection();
 		$v = array($this->bID);
-		$q = 'SELECT * from btJeroCycleEntries WHERE bID = ?';
+		$q = 'SELECT * FROM btJeroCycleEntries WHERE bID = ?';
 		$r = $db->query($q, $v);
 		while ($row = $r->FetchRow()) {
-			$db->execute('INSERT INTO btJeroCycleEntries (bID, fID, linkURL, title, description, sortOrder, internalLinkCID, buttonText) values(?,?,?,?,?,?,?,?)',
+			$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, linkURL, title, description, sortOrder, internalLinkCID, buttonText) values(?,?,?,?,?,?,?,?)',
 				array(
 					$newBID,
 					$row['fID'],
@@ -189,7 +197,7 @@ class Controller extends BlockController {
 		$args['buttonCSS'] = $args['buttonCSS'] ? trim($args['buttonCSS'])  : 'btn btn-default';
 
 		$db = Database::connection();
-		$db->execute('DELETE from btJeroCycleEntries WHERE bID = ?', array($this->bID));
+		$db->executeQuery('DELETE from btJeroCycleEntries WHERE bID = ?', array($this->bID));
 		parent::save($args);
 		if (isset($args['sortOrder'])) {
 			$count = count($args['sortOrder']);
@@ -215,7 +223,7 @@ class Controller extends BlockController {
 					$args['description'][$i] = LinkAbstractor::translateTo($args['description'][$i]);
 				}
 
-				$db->execute('INSERT INTO btJeroCycleEntries (bID, fID, linkURL, internalLinkCID, title, description, buttonText, sortOrder) values(?,?,?,?,?,?,?,?)',
+				$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, linkURL, internalLinkCID, title, description, buttonText, sortOrder) VALUES(?,?,?,?,?,?,?,?)',
 					array(
 						$this->bID,
 						intval($args['fID'][$i]),
@@ -230,26 +238,6 @@ class Controller extends BlockController {
 				++$i;
 			}
 		}
-	}
-
-	public function validate ($args) {
-		$error = Core::make('helper/validation/error');
-		$timeout = intval($args['timeout']);
-		$speed = intval($args['speed']);
-
-		if (!$timeout) {
-			$error->add(t('Slide Duration must be greater than 0.'));
-		}
-		if (!$speed) {
-			$error->add(t('Slide Transition Speed must be greater than 0.'));
-		}
-		// https://github.com/viljamis/ResponsiveSlides.js/issues/132#issuecomment-12543345
-		// "The 'timeout' (amount of time spent on one slide) has to be at least 100 bigger than 'speed', otherwise the function simply returns."
-		if (($timeout - $speed) < 100) {
-			$error->add(t('Slide Duration must be at least 100 ms greater than the Slide Transition Speed.'));
-		}
-
-		return $error;
 	}
 
 	public function composer () {

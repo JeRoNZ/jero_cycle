@@ -1,3 +1,6 @@
+0.9.3 File handling pushed into controller, simplifying view.
+      Replace deprecated functions
+      
 0.9.2 Fixed fatal error adding block to page
 
 0.9.1 Button CSS classes may be edited but will default to "btn btn-default"

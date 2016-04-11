@@ -126,13 +126,14 @@ class Controller extends BlockController {
 			$q['description'] = LinkAbstractor::translateFrom($q['description']);
 
 			$fo = File::getByID($q['fID']);
-			if ($fo) {
-				$fv = $fo->getVersion();
-				if (!$ratio) {
-					$ratio = $fv->getAttribute('width') . ':' . $fv->getAttribute('height');
-				}
-				$q['fV'] = $fv;
+			if (! $fo) {
+				continue;
 			}
+			$fv = $fo->getVersion();
+			if (!$ratio) {
+				$ratio = $fv->getAttribute('width') . ':' . $fv->getAttribute('height');
+			}
+			$q['fV'] = $fv;
 			$rows[] = $q;
 		}
 		$this->set('ratio', $ratio);
@@ -173,7 +174,7 @@ class Controller extends BlockController {
 		$this->requireAsset('core/sitemap');
 		$this->requireAsset('redactor');
 		$db = Database::connection();
-		$query = $db->GetAll('SELECT * from btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+		$query = $db->FetchAll('SELECT * from btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
 		$this->set('rows', $query);
 		$this->set('effects', $this->effectsList);
 	}

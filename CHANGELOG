@@ -1,6 +1,9 @@
+0.9.4 Remove absolute position of buttons on edit
+      Drop any images that don't exist from getting to the view.
+
 0.9.3 File handling pushed into controller, simplifying view.
       Replace deprecated functions
-      
+
 0.9.2 Fixed fatal error adding block to page
 
 0.9.1 Button CSS classes may be edited but will default to "btn btn-default"

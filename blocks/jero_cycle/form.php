@@ -212,6 +212,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 	}
 	.ccm-image-slider-entry {
 		position: relative;
+		min-height:50px;
 	}
 	.ccm-image-slider-entry.slide-closed .form-group {
 		display: none;
@@ -223,16 +224,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 	.ccm-image-slider-entry.slide-closed .form-group:first-of-type label {
 		display: none;
 	}
-	.btn.ccm-edit-slide {
-		position: absolute;
-		top: 10px;
-		right: 127px;
-	}
-	.btn.ccm-delete-image-slider-entry {
-		position: absolute;
-		top: 10px;
-		right: 41px;
-	}
+
 	.ccm-image-slider-block-container i:hover {
 		color: #428bca;
 	}
@@ -347,9 +339,11 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 
 <script type="text/template" id="imageTemplate">
 	<div class="ccm-image-slider-entry slide-well slide-closed">
-		<button type="button" class="btn btn-default ccm-edit-slide" data-slide-close-text="<?php echo t('Collapse Slide'); ?>" data-slide-edit-text="<?php echo t('Edit Slide'); ?>"><?php echo t('Edit Slide'); ?></button>
-		<button type="button" class="btn btn-danger ccm-delete-image-slider-entry"><?php echo t('Remove'); ?></button>
-		<i class="fa fa-arrows"></i>
+		<div>
+			<button type="button" class="btn btn-default ccm-edit-slide" data-slide-close-text="<?php echo t('Collapse Slide'); ?>" data-slide-edit-text="<?php echo t('Edit Slide'); ?>"><?php echo t('Edit Slide'); ?></button>
+			<button type="button" class="btn btn-danger ccm-delete-image-slider-entry"><?php echo t('Remove'); ?></button>
+			<i class="fa fa-arrows"></i>
+		</div>
 		<div class="form-group">
 			<label><?php echo t('Image'); ?></label>
 			<div class="ccm-pick-slide-image">

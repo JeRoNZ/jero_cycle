@@ -188,7 +188,6 @@ class Controller extends BlockController {
 		$args['sync'] = isset($args['sync']) ? 1 : 0;
 		$args['noAnimate'] = isset($args['noAnimate']) ? 1 : 0;
 		$args['pause'] = isset($args['pause']) ? 1 : 0;
-		$args['sync'] = isset($args['sync']) ? 1 : 0;
 		$args['fadeCaption'] = isset($args['fadeCaption']) ? 1 : 0;
 		$args['swipe'] = isset($args['swipe']) ? 1 : 0;
 		$args['buttonCSS'] = $args['buttonCSS'] ? trim($args['buttonCSS'])  : 'btn btn-default';

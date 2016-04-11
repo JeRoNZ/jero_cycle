@@ -1,3 +1,7 @@
+0.9.5 Removed button option since these will now hide if the
+      button text is left blank or there is no link. Added
+      option to fadein captions. Removed more deprecated code.
+
 0.9.4 Remove absolute position of buttons on edit
       Drop any images that don't exist from getting to the view.
 

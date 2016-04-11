@@ -71,20 +71,16 @@ class Controller extends BlockController {
 
 		$this->requireAsset('javascript', 'jquery');
 		$this->requireAsset('javascript', 'cycle2');
-		$this->requireAsset('javascript', 'cycle2caption');
 		$sets = $this->getSets();
 		if ($sets['swipe'] == 1) {
 			$this->requireAsset('javascript', 'cycle2swipe');
 		}
+		if ($sets['fadeCaption'] == 1) {
+			$this->requireAsset('javascript', 'cycle2caption');
+		}
 		switch ($sets['effect']) {
-			case 'flip':
-				$this->requireAsset('javascript', 'cycle2flip');
-				break;
 			case 'scrollVert':
 				$this->requireAsset('javascript', 'cycle2scrollVert');
-				break;
-			case 'tile':
-				$this->requireAsset('javascript', 'cycle2tile');
 				break;
 			case 'shuffle':
 				$this->requireAsset('javascript', 'cycle2shuffle');
@@ -193,7 +189,7 @@ class Controller extends BlockController {
 		$args['noAnimate'] = isset($args['noAnimate']) ? 1 : 0;
 		$args['pause'] = isset($args['pause']) ? 1 : 0;
 		$args['sync'] = isset($args['sync']) ? 1 : 0;
-		$args['button'] = isset($args['sync']) ? 1 : 0;
+		$args['fadeCaption'] = isset($args['fadeCaption']) ? 1 : 0;
 		$args['swipe'] = isset($args['swipe']) ? 1 : 0;
 		$args['buttonCSS'] = $args['buttonCSS'] ? trim($args['buttonCSS'])  : 'btn btn-default';
 

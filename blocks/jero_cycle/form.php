@@ -1,7 +1,7 @@
 <?php defined('C5_EXECUTE') or die("Access Denied.");
 
-$fp = FilePermissions::getGlobal();
-$tp = new TaskPermission();
+$fp = new Permissions(FileSet::getGlobal());
+$tp = new Permissions();
 
 echo Core::make('helper/concrete/ui')->tabs(array(
 	array('slides', t('Slides'), true),
@@ -13,7 +13,6 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 <script>
 	var CCM_EDITOR_SECURITY_TOKEN = "<?php echo Core::make('helper/validation/token')->generate('editor'); ?>";
 	$(document).ready(function() {
-		var ccmReceivingEntry = '';
 		var sliderEntriesContainer = $('.ccm-image-slider-entries');
 		var _templateSlide = _.template($('#imageTemplate').html());
 
@@ -313,9 +312,9 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			<?php echo $form->checkbox('noAnimate', $noAnimate, $noAnimate ? 'checked' : ''); ?>
 		</div>
 		<div class="form-group">
-			<?php echo $form->label('button', t('Show buttons')); ?>
-			<?php echo $form->checkbox('button', $button, $button ? 'checked' : ''); ?>
-			<p style="font-size: smaller"><?php echo t('If checked then a button link will show on each slide.')?>.</p>
+			<?php echo $form->label('fadeCaption', t('Fade captions')); ?>
+			<?php echo $form->checkbox('fadeCaption', $fadeCaption, $fadeCaption ? 'checked' : ''); ?>
+			<p style="font-size: smaller"><?php echo t('If checked then captions will fade in and out on each slide.')?>.</p>
 		</div>
 		<div class="form-group">
 			<?php echo $form->label('pause', t('Pause Slideshow on Hover')); ?>

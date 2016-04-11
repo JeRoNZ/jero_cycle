@@ -33,10 +33,12 @@ if ($effect == 'continuous') {
 }
 ?>
 	 data-cycle-log="false"
-	 data-cycle-overlay-template='<div class="cycle-caption"><h2><a href="{{link}}">{{title}}</a></h2><h4>{{desc}}</h4><?php
-	 if ($button) {
-		 ?><a class="<?php echo $buttonCSS ? $buttonCSS : 'btn btn-default' ?>" href="{{link}}">{{buttontext}}</a><?php
-	 } ?></div>'
+	<?php if ($fadeCaption) { ?>
+		data-cycle-caption-plugin="caption2"
+		data-cycle-overlay-fx-out="fadeOut"
+		data-cycle-overlay-fx-in="fadeIn"
+	<?php } ?>
+	 data-cycle-overlay-template='<div class="cycle-caption">{{h2link}}<h4>{{desc}}</h4><a class="<?php echo $buttonCSS ? $buttonCSS : 'btn btn-default' ?> {{hiddenclass}}" href="{{link}}">{{buttontext}}</a></div>'
 	 data-cycle-auto-height="<?php echo $ratio ?>">
 	<div class="cycle-overlay"></div>
 	<?php
@@ -57,11 +59,24 @@ if ($effect == 'continuous') {
 		?>
 		<img data-cycle-title="<?php echo h($row['title']) ?>"
 			 data-cycle-desc="<?php echo h($row['description']) ?>"
-			 data-cycle-link="<?php
-			 if ($row['linkURL'])
-				 echo $row['linkURL'];
-			 ?>"
-			 data-cycle-buttontext="<?php echo h($row['buttonText']) ?>"
+			<?php
+			if ($row['linkURL']) {
+				if (!$row['buttonText']) {
+					?>
+					data-cycle-link="<?php echo $row['linkURL'] ?>"
+				<?php } ?>
+				data-cycle-h2link='<h2><a href="<?php echo $row['linkURL'] ?>"><?php echo h($row['title']) ?></a></h2>'
+			<?php
+			} else {
+				?>
+				data-cycle-hiddenclass="cycle-link-hidden"
+				data-cycle-h2link='<h2><?php echo h($row['title']) ?></h2>'
+			<?php
+			}
+			if ($row['buttonText']) {
+				?>
+				data-cycle-buttontext="<?php echo h($row['buttonText']) ?>"
+			<?php } ?>
 			 src="<?php echo($row['fV'] ? $row['fV']->getURL() : '') ?>" alt="<?php echo h($row['title']) ?>"/>
 	<?php
 	}

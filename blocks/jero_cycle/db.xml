@@ -25,7 +25,7 @@
         <field name="pause" type="integer">
             <unsigned/>
         </field>
-        <field name="button" type="integer">
+        <field name="fadeCaption" type="integer">
             <unsigned/>
         </field>
         <field name="swipe" type="integer">

@@ -1,3 +1,5 @@
+0.9.7 Use inline style attributes rather than <style> in head.
+
 0.9.6 Maximum z-index of the slides can now be set. Plugin default is 100
       which doesn't play real nice with the Elemental theme's responsive nav.
       Specifying a value of 80 works much better.

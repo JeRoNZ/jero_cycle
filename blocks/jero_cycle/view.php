@@ -37,22 +37,22 @@ if ($effect == 'continuous') {
 		data-cycle-caption-plugin="caption2"
 		data-cycle-overlay-fx-out="fadeOut"
 		data-cycle-overlay-fx-in="fadeIn"
-		data-cycle-max-z="<?php echo $maxZ?>"
 	<?php } ?>
-	 data-cycle-overlay-template='<div class="cycle-caption">{{h2link}}<h4>{{desc}}</h4><a class="<?php echo $buttonCSS ? $buttonCSS : 'btn btn-default' ?> {{hiddenclass}}" href="{{link}}">{{buttontext}}</a></div>'
+	data-cycle-max-z="<?php echo $maxZ?>"
+	 data-cycle-overlay-template='<div class="cycle-caption" style="z-index:<?php echo $maxZ ? $maxZ +10 : 110?>">{{h2link}}<h4>{{desc}}</h4><a class="<?php echo $buttonCSS ? $buttonCSS : 'btn btn-default' ?> {{hiddenclass}}" href="{{link}}">{{buttontext}}</a></div>'
 	 data-cycle-auto-height="<?php echo $ratio ?>">
 	<div class="cycle-overlay"></div>
 	<?php
 	switch ($navigationType) {
 		case 1:
 			?>
-			<div class="cycle-prev cycle-nav"><img src="<?php echo $blockURL ?>/img/arrow-left.png" alt="Previous"></div>
-			<div class="cycle-next cycle-nav"><img src="<?php echo $blockURL ?>/img/arrow-right.png" alt="Next"></div>
+			<div class="cycle-prev" style="z-index:<?php echo $maxZ ? $maxZ +11 : 111?>"><img src="<?php echo $blockURL ?>/img/arrow-left.png" alt="Previous"></div>
+			<div class="cycle-next" style="z-index:<?php echo $maxZ ? $maxZ +11 : 111?>"><img src="<?php echo $blockURL ?>/img/arrow-right.png" alt="Next"></div>
 			<?php
 			break;
 		case 2:
 			?>
-			<div class="cycle-pager cycle-nav"></div>
+			<div class="cycle-pager" style="z-index:<?php echo $maxZ ? $maxZ +11 : 111?>"></div>
 			<?php
 			break;
 	}
@@ -62,10 +62,8 @@ if ($effect == 'continuous') {
 			 data-cycle-desc="<?php echo h($row['description']) ?>"
 			<?php
 			if ($row['linkURL']) {
-				if (!$row['buttonText']) {
-					?>
-					data-cycle-link="<?php echo $row['linkURL'] ?>"
-				<?php } ?>
+				?>
+				data-cycle-link="<?php echo $row['linkURL'] ?>"
 				data-cycle-h2link='<h2><a href="<?php echo $row['linkURL'] ?>"><?php echo h($row['title']) ?></a></h2>'
 			<?php
 			} else {
@@ -77,6 +75,8 @@ if ($effect == 'continuous') {
 			if ($row['buttonText']) {
 				?>
 				data-cycle-buttontext="<?php echo h($row['buttonText']) ?>"
+			<?php } else { ?>
+			data-cycle-hiddenclass="cycle-link-hidden"
 			<?php } ?>
 			 src="<?php echo($row['fV'] ? $row['fV']->getURL() : '') ?>" alt="<?php echo h($row['title']) ?>"/>
 	<?php

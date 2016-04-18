@@ -35,6 +35,10 @@
             <unsigned/>
             <default value="0"/>
         </field>
+        <field name="maxZ" type="integer">
+            <unsigned/>
+            <default value="0"/>
+        </field>
     </table>
     <table name="btJeroCycleEntries">
         <field name="id" type="integer">

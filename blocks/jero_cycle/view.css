@@ -9,7 +9,6 @@
 
 .cycle-caption {
     position: absolute;
-    z-index: 110;
     left: 0;
     right: 0;
     top: 10%;
@@ -34,7 +33,6 @@
     position: absolute;
     top: 45%;
     left: 1em;
-    z-index: 111;
     cursor: pointer;
 }
 
@@ -44,14 +42,12 @@
     position: absolute;
     top: 45%;
     right: 1em;
-    z-index: 111;
     cursor: pointer;
 }
 
 .cycle-pager {
     text-align: center;
     width: 100%;
-    z-index: 111;
     position: absolute;
     bottom: 10px;
     overflow: hidden;

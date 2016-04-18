@@ -37,6 +37,7 @@ if ($effect == 'continuous') {
 		data-cycle-caption-plugin="caption2"
 		data-cycle-overlay-fx-out="fadeOut"
 		data-cycle-overlay-fx-in="fadeIn"
+		data-cycle-max-z="<?php echo $maxZ?>"
 	<?php } ?>
 	 data-cycle-overlay-template='<div class="cycle-caption">{{h2link}}<h4>{{desc}}</h4><a class="<?php echo $buttonCSS ? $buttonCSS : 'btn btn-default' ?> {{hiddenclass}}" href="{{link}}">{{buttontext}}</a></div>'
 	 data-cycle-auto-height="<?php echo $ratio ?>">
@@ -45,13 +46,13 @@ if ($effect == 'continuous') {
 	switch ($navigationType) {
 		case 1:
 			?>
-			<div class="cycle-prev"><img src="<?php echo $blockURL ?>/img/arrow-left.png" alt="Previous"></div>
-			<div class="cycle-next"><img src="<?php echo $blockURL ?>/img/arrow-right.png" alt="Next"></div>
+			<div class="cycle-prev cycle-nav"><img src="<?php echo $blockURL ?>/img/arrow-left.png" alt="Previous"></div>
+			<div class="cycle-next cycle-nav"><img src="<?php echo $blockURL ?>/img/arrow-right.png" alt="Next"></div>
 			<?php
 			break;
 		case 2:
 			?>
-			<div class="cycle-pager"></div>
+			<div class="cycle-pager cycle-nav"></div>
 			<?php
 			break;
 	}

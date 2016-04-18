@@ -40,6 +40,13 @@ class Controller extends BlockController {
 			'tileBlind' => 'tileBlind'
 		);
 
+	public function on_start() {
+		// Need to push the caption and nav arrows lower as well as the slides
+		// since they can overlay the menu in Elemental
+		$z = $this->maxZ ? $this->maxZ +10 : 111;
+		$this->addHeaderItem('<style type="text/css">.cycle-nav { z-index:'.($z+1).'}.cycle-caption {z-index: '.$z.'}</style>');
+	}
+
 	public function getBlockTypeDescription () {
 		return t("Yet another image slide show, this one uses the amazing responsive cycle2 plugin");
 	}
@@ -183,6 +190,7 @@ class Controller extends BlockController {
 		);
 		$args['timeout'] = intval($args['timeout']);
 		$args['speed'] = intval($args['speed']);
+		$args['maxZ'] = intval($args['maxZ']) < 20 ? 100 : intval($args['maxZ']);
 		$args['navigationType'] = intval($args['navigationType']);
 		$args['effect'] = in_array($args['effect'], $this->effectsList) ? $args['effect'] : 'fade';
 		$args['sync'] = isset($args['sync']) ? 1 : 0;

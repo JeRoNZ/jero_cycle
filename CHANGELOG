@@ -1,3 +1,7 @@
+0.9.6 Maximum z-index of the slides can now be set. Plugin default is 100
+      which doesn't play real nice with the Elemental theme's responsive nav.
+      Specifying a value of 80 works much better.
+
 0.9.5 Removed button option since these will now hide if the
       button text is left blank or there is no link. Added
       option to fadein captions. Removed more deprecated code.

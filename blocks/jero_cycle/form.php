@@ -293,6 +293,13 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 				<?php echo $form->select('effect', $effects, $effect)?>
 			</div>
 		</div>
+		<div class="form-group">
+			<?php echo $form->label('maxZ', t('Maximum z-index')); ?>
+			<div class="input-group" style="width: 150px">
+				<?php echo $form->number('maxZ', $maxZ ? $maxZ : 100, array('min' => '20', 'max' => '10000'))?>
+			</div>
+			<p style="font-size: smaller"><?php echo t('Enter the maximum z-index value the slides will have. If you find you dropdown menu hides behind the slideshow, consider lowering this value')?>.</p>
+		</div>
 	</div>
 
 	<div style="width:50%;float:right">

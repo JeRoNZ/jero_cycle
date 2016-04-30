@@ -1,3 +1,5 @@
+1.0.0 added !important to cycle-link-hidden class
+
 0.9.7 Use inline style attributes rather than <style> in head.
 
 0.9.6 Maximum z-index of the slides can now be set. Plugin default is 100

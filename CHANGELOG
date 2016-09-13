@@ -1,3 +1,6 @@
+1.0.1 Use display:none on all but the first slide to prevent 
+      Flash of Unstyled Content
+
 1.0.0 added !important to cycle-link-hidden class
 
 0.9.7 Use inline style attributes rather than <style> in head.
@@ -20,4 +23,4 @@
 
 0.9.1 Button CSS classes may be edited but will default to "btn btn-default"
 
-0.9	  Submitted to marketplace
+0.9   Submitted to marketplace

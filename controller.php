@@ -1,4 +1,4 @@
-<?php
+<?php 
 namespace Concrete\Package\JeroCycle;
 
 use BlockType;
@@ -11,7 +11,7 @@ defined('C5_EXECUTE') or die(_("Access Denied."));
 class Controller extends Package {
 	protected $pkgHandle = 'jero_cycle';
 	protected $appVersionRequired = '5.7.5';
-	protected $pkgVersion = '1.0.0';
+	protected $pkgVersion = '1.0.1';
 
 	public function getPackageName () {
 		return t("Cycle2 Slide Show");

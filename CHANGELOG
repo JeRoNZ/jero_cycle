@@ -1,4 +1,7 @@
-1.0.1 Use display:none on all but the first slide to prevent 
+1.0.2 Avoid potential robot induced 404 errors if there is no
+      link by setting the link to "#"
+
+1.0.1 Use display:none on all but the first slide to prevent
       Flash of Unstyled Content
 
 1.0.0 added !important to cycle-link-hidden class

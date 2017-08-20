@@ -72,6 +72,7 @@ if ($effect == 'continuous') {
 			<?php 
 			} else {
 				?>
+				data-cycle-link="#"
 				data-cycle-hiddenclass="cycle-link-hidden"
 				data-cycle-h2link='<h2><?php  echo h($row['title']) ?></h2>'
 			<?php 

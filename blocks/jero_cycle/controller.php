@@ -113,7 +113,7 @@ class Controller extends BlockController {
 		$rows = array();
 
 		$ratio = false;
-		foreach ($r as $q) {
+		foreach ($r as &$q) {
 			if (!$q['linkURL'] && $q['internalLinkCID']) {
 				$c = Page::getByID($q['internalLinkCID'], 'ACTIVE');
 				$q['linkURL'] = $c->getCollectionLink();
@@ -130,6 +130,19 @@ class Controller extends BlockController {
 				$ratio = $fv->getAttribute('width') . ':' . $fv->getAttribute('height');
 			}
 			$q['fV'] = $fv;
+
+			$fo = File::getByID($q['iconfID']);
+			/* @var $fo \Concrete\Core\Entity\File\File */
+			if (! $fo) {
+				$q['fvIcon'] = null;
+			} else {
+				$fv = $fo->getVersion();
+				/* @var $fv \Concrete\Core\Entity\File\Version */
+				#var_dump($fv->getURL());die();
+				$q['fvIcon'] = $fv;
+				#var_dump($q['fvIcon']->getURL());die();
+			}
+			#var_dump(array_keys($q));die();
 			$rows[] = $q;
 		}
 		$this->set('ratio', $ratio);
@@ -144,10 +157,11 @@ class Controller extends BlockController {
 		$q = 'SELECT * FROM btJeroCycleEntries WHERE bID = ?';
 		$r = $db->query($q, $v);
 		while ($row = $r->FetchRow()) {
-			$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, linkURL, title, description, sortOrder, internalLinkCID, buttonText) values(?,?,?,?,?,?,?,?)',
+			$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, iconfID, linkURL, title, description, sortOrder, internalLinkCID, buttonText) values(?,?,?,?,?,?,?,?,?)',
 				array(
 					$newBID,
 					$row['fID'],
+					$row['iconfID'],
 					$row['linkURL'],
 					$row['title'],
 					$row['description'],
@@ -220,10 +234,11 @@ class Controller extends BlockController {
 					$args['description'][$i] = LinkAbstractor::translateTo($args['description'][$i]);
 				}
 
-				$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, linkURL, internalLinkCID, title, description, buttonText, sortOrder) VALUES(?,?,?,?,?,?,?,?)',
+				$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, iconfID, linkURL, internalLinkCID, title, description, buttonText, sortOrder) VALUES(?,?,?,?,?,?,?,?,?)',
 					array(
 						$this->bID,
 						intval($args['fID'][$i]),
+						intval($args['iconfID'][$i]),
 						$linkURL,
 						$internalLinkCID,
 						$args['title'][$i],

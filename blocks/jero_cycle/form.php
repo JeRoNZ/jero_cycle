@@ -40,6 +40,20 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			});
 		};
 
+		var attachFileManagerLaunchIcon = function($obj) {
+			$obj.click(function() {
+				var oldLauncher = $(this);
+				ConcreteFileManager.launchDialog(function(data) {
+					ConcreteFileManager.getFileDetails(data.fID, function(r) {
+						jQuery.fn.dialog.hideLoader();
+						var file = r.files[0];
+						oldLauncher.html(file.resultsThumbnailImg);
+						oldLauncher.next('.icon-fID').val(file.fID);
+					});
+				});
+			});
+		};
+
 		var doSortCount = function() {
 			$('.ccm-image-slider-entry').each(function(index) {
 				$(this).find('.ccm-image-slider-entry-sort').val(index);
@@ -74,11 +88,36 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			   } ?>
 		sliderEntriesContainer.append(_templateSlide({
 			fID: '<?php echo $row['fID']; ?>',
-			<?php if (File::getByID($row['fID'])) { ?>
-			image_url: '<?php echo File::getByID($row['fID'])->getThumbnailURL('file_manager_listing'); ?>',
-			<?php } else { ?>
+
+
+
+			<?php
+			 $file = File::getByID($row['fID']);
+			 if ($file) {
+				echo "image_url: '". $file->getThumbnailURL('file_manager_listing'). "',";
+			 	echo "image_dimensions: '".$file->getAttribute('width'). "x".$file->getAttribute('height')."',";
+			 	echo "image_title: '".$file->getTitle()."',";
+			 } else { ?>
 			image_url: '',
+			image_dimensions: '',
+			image_title: '',
 			<?php } ?>
+
+
+
+			iconfID: '<?php echo $row['iconfID']; ?>',
+			<?php
+			$file = File::getByID($row['iconfID']);
+			if ($file) {
+				echo "icon_url: '". $file->getThumbnailURL('file_manager_listing'). "',";
+				echo "icon_dimensions: '".$file->getAttribute('width'). "x".$file->getAttribute('height')."',";
+				echo "icon_title: '".$file->getTitle()."',";
+			} 	else { ?>
+			icon_url: '',
+			icon_dimensions: '',
+			icon_title: '',
+			<?php } ?>
+
 			link_url: '<?php echo $row['linkURL']; ?>',
 			link_type: '<?php echo $linkType; ?>',
 			title: '<?php echo addslashes(h($row['title'])); ?>',
@@ -99,6 +138,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			var thisModal = $(this).closest('.ui-dialog-content');
 			sliderEntriesContainer.append(_templateSlide({
 				fID: '',
+				iconfID: '',
 				title: '',
 				link_url: '',
 				cID: '',
@@ -106,6 +146,9 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 				link_type: 0,
 				sort_order: '',
 				image_url: '',
+				icon_url: '',
+				image_dimensions: '',
+				image_title: '',
 				buttonText: ''
 			}));
 
@@ -157,6 +200,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 
 		attachDelete($('.ccm-delete-image-slider-entry'));
 		attachFileManagerLaunch($('.ccm-pick-slide-image'));
+		attachFileManagerLaunchIcon($('.ccm-pick-slide-icon'));
 		$(function() {  // activate redactors
 			$('.redactor-content').redactor({
 				minHeight: 200,
@@ -195,7 +239,8 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
 		box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
 	}
-	.ccm-pick-slide-image {
+	.ccm-pick-slide-image,
+	.ccm-pick-slide-icon {
 		padding: 5px;
 		cursor: pointer;
 		background: #dedede;
@@ -206,7 +251,8 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 		height: 72px;
 		display: table-cell;
 	}
-	.ccm-pick-slide-image img {
+	.ccm-pick-slide-image img,
+	.ccm-pick-slide-icon img {
 		max-width: 100%;
 	}
 	.ccm-image-slider-entry {
@@ -351,17 +397,36 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			<i class="fa fa-arrows"></i>
 		</div>
 		<div class="form-group">
-			<label><?php echo t('Image'); ?></label>
-			<div class="ccm-pick-slide-image">
-                <% if (image_url.length > 0) { %>
-                    <img src="<%= image_url %>" />
-                <% } else { %>
-                    <i class="fa fa-picture-o"></i>
-                <% } %>
-            </div>
-			<input type="hidden" name="<?php echo $view->field('fID'); ?>[]" class="image-fID" value="<%=fID%>" />
+			<div style="width:50%;float:left">
+				<label><?php echo t('Image'); ?></label>
+
+				<div class="ccm-pick-slide-image">
+					<% if (image_url.length > 0) { %>
+					<img src="<%= image_url %>"/>
+					<span style="font-size: 10px"><%= image_dimensions %></span>
+					<% } else { %>
+					<i class="fa fa-picture-o"></i>
+					<% } %>
+				</div>
+				<span style="font-size: 12px"><%= image_title %></span>
+				<input type="hidden" name="<?php echo $view->field('fID'); ?>[]" class="image-fID" value="<%=fID%>"/>
+			</div>
+			<div style="width:50%;float:left">
+				<label><?php echo t('Icon (optional)'); ?></label>
+
+				<div class="ccm-pick-slide-icon">
+					<% if (icon_url.length > 0) { %>
+					<img src="<%= icon_url %>"/>
+					<span style="font-size: 10px"><%= icon_dimensions %></span>
+					<% } else { %>
+					<i class="fa fa-picture-o"></i>
+					<% } %>
+				</div>
+				<span style="font-size: 12px"><%= icon_title %></span>
+				<input type="hidden" name="<?php echo $view->field('iconfID'); ?>[]" class="icon-fID" value="<%=iconfID%>"/>
+			</div>
 		</div>
-		<div class="form-group" >
+		<div class="form-group" style="clear: left">
 			<label><?php echo t('Title'); ?></label>
 			<input type="text" name="<?php echo $view->field('title'); ?>[]" value="<%=title%>" />
 		</div>

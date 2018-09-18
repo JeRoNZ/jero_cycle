@@ -173,6 +173,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			});
 			attachDelete(newSlide.find('.ccm-delete-image-slider-entry'));
 			attachFileManagerLaunch(newSlide.find('.ccm-pick-slide-image'));
+			attachFileManagerLaunchIcon(newSlide.find('.ccm-pick-slide-icon'));
 			newSlide.find('div[data-field=entry-link-page-selector-select]').concretePageSelector({
 				'inputName': 'internalLinkCID[]'
 			});
@@ -409,8 +410,8 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 					<i class="fa fa-picture-o"></i>
 					<% } %>
 				</div>
-				<span style="font-size: 12px"><%= image_title %></span>
 				<input type="hidden" name="<?php echo $view->field('fID'); ?>[]" class="image-fID" value="<%=fID%>"/>
+				<span style="font-size: 12px"><%= image_title %></span>
 			</div>
 			<div style="width:50%;float:left">
 				<label><?php echo t('Icon (optional)'); ?></label>
@@ -423,8 +424,8 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 					<i class="fa fa-picture-o"></i>
 					<% } %>
 				</div>
-				<span style="font-size: 12px"><%= icon_title %></span>
 				<input type="hidden" name="<?php echo $view->field('iconfID'); ?>[]" class="icon-fID" value="<%=iconfID%>"/>
+				<span style="font-size: 12px"><%= icon_title %></span>
 			</div>
 		</div>
 		<div class="form-group" style="clear: left">

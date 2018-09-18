@@ -147,6 +147,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 				sort_order: '',
 				image_url: '',
 				icon_url: '',
+				icon_title: '',
 				image_dimensions: '',
 				image_title: '',
 				buttonText: ''

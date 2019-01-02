@@ -12,6 +12,16 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 
 <script>
 	var CCM_EDITOR_SECURITY_TOKEN = "<?php echo Core::make('helper/validation/token')->generate('editor'); ?>";
+
+	<?php
+		if (version_compare(\Config::get('concrete.version'), '8.0', '>=')) {
+		$editorJavascript = Core::make('editor')->outputStandardEditorInitJSFunction();
+		?>
+	var launchEditor = <?= $editorJavascript; ?>;
+	<?php
+		}
+	?>
+
 	$(document).ready(function() {
 		var sliderEntriesContainer = $('.ccm-image-slider-entries');
 		var _templateSlide = _.template($('#imageTemplate').html());
@@ -20,6 +30,12 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			$obj.click(function() {
 				var deleteIt = confirm('<?php echo t('Are you sure?'); ?>');
 				if (deleteIt === true) {
+					<?php if (version_compare(\Config::get('concrete.version'), '8.0', '>=')) {?>
+					var slideID = $(this).closest('.ccm-image-slider-entry').find('.editor-content').attr('id');
+					if (typeof CKEDITOR === 'object') {
+						CKEDITOR.instances[slideID].destroy();
+					}
+					<?php } ?>
 					$(this).closest('.ccm-image-slider-entry').remove();
 					doSortCount();
 				}
@@ -163,6 +179,11 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			newSlide.removeClass('slide-closed').find('.btn.ccm-edit-slide').text(closeText);
 
 			thisModal.scrollTop(newSlide.offset().top);
+
+			<?php
+			if (version_compare(\Config::get('concrete.version'), '8.0', '>=')) {?>
+			launchEditor(newSlide.find('.editor-content'));
+			<?php } else {?>
 			newSlide.find('.redactor-content').redactor({
 				minHeight: 200,
 				'concrete5': {
@@ -171,6 +192,8 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 					lightbox: true
 				}
 			});
+			<?php } ?>
+
 			attachDelete(newSlide.find('.ccm-delete-image-slider-entry'));
 			attachFileManagerLaunch(newSlide.find('.ccm-pick-slide-image'));
 			attachFileManagerLaunchIcon(newSlide.find('.ccm-pick-slide-icon'));
@@ -203,7 +226,18 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 		attachDelete($('.ccm-delete-image-slider-entry'));
 		attachFileManagerLaunch($('.ccm-pick-slide-image'));
 		attachFileManagerLaunchIcon($('.ccm-pick-slide-icon'));
-		$(function() {  // activate redactors
+
+		<?php
+		if (version_compare(\Config::get('concrete.version'), '8.0', '>=')) { ?>
+		$(function () {  // activate editors
+			if ($('.editor-content-<?php echo $bID; ?>').length) {
+				launchEditor($('.editor-content-<?php echo $bID; ?>'));
+			}
+		});
+		<?php
+		} else {
+		?>
+		$(function () {  // activate redactors
 			$('.redactor-content').redactor({
 				minHeight: 200,
 				'concrete5': {
@@ -213,6 +247,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 				}
 			});
 		});
+		<?php } ?>
 	});
 </script>
 <style>
@@ -434,8 +469,14 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 		</div>
 		<div class="form-group" >
 			<label><?php echo t('Description'); ?></label>
-			<div class="redactor-edit-content"></div>
-			<textarea style="display: none" class="redactor-content" name="<?php echo $view->field('description'); ?>[]"><%=description%></textarea>
+			<?php if (version_compare(\Config::get('concrete.version'), '8.0', '>=')) { ?>
+				<div class="editor-edit-content"></div>
+				<textarea id="ccm-slide-editor-<%= _.uniqueId() %>" style="display: none" class="editor-content editor-content-<?php echo $bID; ?>"
+						  name="<?php echo $view->field('description'); ?>[]"><%=description%></textarea>
+			<?php } else { ?>}
+				<div class="redactor-edit-content"></div>
+				<textarea style="display: none" class="redactor-content" name="<?php echo $view->field('description'); ?>[]"><%=description%></textarea>
+			<?php } ?>
 		</div>
 		<div class="form-group" >
 			<label><?php echo t('Link'); ?></label>

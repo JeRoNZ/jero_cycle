@@ -37,7 +37,8 @@ class Controller extends BlockController {
 			'flipHorz' => 'flipHorz',
 			'flipVert' => 'flipVert',
 			'tileSlide' => 'tileSlide',
-			'tileBlind' => 'tileBlind'
+			'tileBlind' => 'tileBlind',
+			'carousel' => 'carousel',
 		);
 
 	public function getBlockTypeDescription () {
@@ -79,6 +80,9 @@ class Controller extends BlockController {
 			$this->requireAsset('javascript', 'cycle2caption');
 		}
 		switch ($sets['effect']) {
+			case 'carousel':
+				$this->requireAsset('javascript', 'cycle2carousel');
+				break;
 			case 'scrollVert':
 				$this->requireAsset('javascript', 'cycle2scrollVert');
 				break;
@@ -102,7 +106,9 @@ class Controller extends BlockController {
 	public function add () {
 		$this->requireAsset('core/file-manager');
 		$this->requireAsset('core/sitemap');
-		$this->requireAsset('redactor');
+		if (version_compare(\Config::get('concrete.version'), '8.0', '<')) {
+			$this->requireAsset('redactor');
+		}
 		$this->set('effects', $this->effectsList);
 	}
 
@@ -130,7 +136,6 @@ class Controller extends BlockController {
 				$ratio = $fv->getAttribute('width') . ':' . $fv->getAttribute('height');
 			}
 			$q['fV'] = $fv;
-
 			$fo = File::getByID($q['iconfID']);
 			/* @var $fo \Concrete\Core\Entity\File\File */
 			if (! $fo) {
@@ -138,11 +143,8 @@ class Controller extends BlockController {
 			} else {
 				$fv = $fo->getVersion();
 				/* @var $fv \Concrete\Core\Entity\File\Version */
-				#var_dump($fv->getURL());die();
 				$q['fvIcon'] = $fv;
-				#var_dump($q['fvIcon']->getURL());die();
 			}
-			#var_dump(array_keys($q));die();
 			$rows[] = $q;
 		}
 		$this->set('ratio', $ratio);
@@ -182,7 +184,9 @@ class Controller extends BlockController {
 	public function edit () {
 		$this->requireAsset('core/file-manager');
 		$this->requireAsset('core/sitemap');
-		$this->requireAsset('redactor');
+		if (version_compare(\Config::get('concrete.version'), '8.0', '<')) {
+			$this->requireAsset('redactor');
+		}
 		$db = Database::connection();
 		$query = $db->FetchAll('SELECT * from btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
 		$this->set('rows', $query);

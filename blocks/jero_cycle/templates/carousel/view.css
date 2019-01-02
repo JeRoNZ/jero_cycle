@@ -1,0 +1,70 @@
+.disabledCycle2Block {
+    min-height: 200px;
+}
+
+.carousel .cycle-prev {
+    text-align: center;
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    left: 0;
+    cursor: pointer;
+    background: #3e3f94;
+    top: calc(50% - 23px);
+}
+
+.carousel .cycle-next {
+    text-align: center;
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    background: #3e3f94;
+    top: calc(50% - 23px);
+}
+
+.carousel .fa {
+    color: #c49925;
+    line-height: 45px;
+    font-size: 20px;
+}
+
+.carousel img {
+    padding: 0 13px;
+}
+
+@media screen and (max-width: 767px) {
+    .carousel img {
+        padding: 0 5px;
+    }
+
+    .carousel .cycle-prev {
+        text-align: center;
+        width: 20px;
+        height: 20px;
+        background: #3e3f94;
+        top: calc(50% - 10px);
+    }
+
+    .carousel .cycle-next {
+        width: 20px;
+        height: 20px;
+        background: #3e3f94;
+        top: calc(50% - 10px);
+    }
+
+    .carousel .fa {
+        line-height: 10px;
+        font-size: 10px;
+    }
+}
+
+/*
+
+.carousel img:first-child {
+    padding-left: 23px;
+}
+.carousel img:last-child {
+    padding-right: 23px;
+}*/

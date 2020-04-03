@@ -138,7 +138,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 			link_type: '<?php echo $linkType; ?>',
 			title: '<?php echo addslashes(h($row['title'])); ?>',
 			description: '<?php echo str_replace(array("\t", "\r", "\n"), "", addslashes(h($row['description']))); ?>',
-			buttonText: '<?php echo $row['buttonText']; ?>',
+			buttonText: '<?php echo h($row['buttonText']); ?>',
 			sort_order: '<?php echo $row['sortOrder']; ?>'
 		}));
 		sliderEntriesContainer.find('.ccm-image-slider-entry:last-child div[data-field=entry-link-page-selector]').concretePageSelector({

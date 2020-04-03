@@ -64,7 +64,7 @@
         </field>
         <field name="title" type="string" size="100"/>
         <field name="description" type="text"/>
-        <field name="buttonText" type="string" size="50"/>
+        <field name="buttonText" type="string" size="100"/>
         <field name="sortOrder" type="integer"/>
     </table>
 </schema>

@@ -3,6 +3,7 @@
 defined("C5_EXECUTE") or die("Access Denied.");
 
 use Concrete\Core\Block\BlockController;
+use Concrete\Core\Database\Connection\Connection;
 use Concrete\Core\Editor\LinkAbstractor;
 use Core;
 use File;
@@ -42,11 +43,11 @@ class Controller extends BlockController {
 		);
 
 	public function getBlockTypeDescription () {
-		return t("Yet another image slide show, this one uses the amazing responsive cycle2 plugin");
+		return t('Yet another image slide show, this one uses the amazing responsive cycle2 plugin');
 	}
 
 	public function getBlockTypeName () {
-		return t("Cycle2 Slide Show");
+		return t('Cycle2 Slide Show');
 	}
 
 	public function getSearchableContent () {
@@ -152,27 +153,19 @@ class Controller extends BlockController {
 		return $rows;
 	}
 
-	public function duplicate ($newBID) {
+
+	public function duplicate($newBID)
+	{
 		parent::duplicate($newBID);
-		$db = Database::connection();
-		$v = array($this->bID);
-		$q = 'SELECT * FROM btJeroCycleEntries WHERE bID = ?';
-		$r = $db->query($q, $v);
-		while ($row = $r->FetchRow()) {
-			$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, iconfID, linkURL, title, description, sortOrder, internalLinkCID, buttonText) values(?,?,?,?,?,?,?,?,?)',
-				array(
-					$newBID,
-					$row['fID'],
-					$row['iconfID'],
-					$row['linkURL'],
-					$row['title'],
-					$row['description'],
-					$row['sortOrder'],
-					$row['internalLinkCID'],
-					$row['buttonText']
-				)
-			);
-		}
+		$db = $this->app->make(Connection::class);
+		$copyFields = 'fID, iconfID, linkURL, title, description, sortOrder, internalLinkCID, buttonText';
+		$db->executeUpdate(
+			"INSERT INTO btJeroCycleEntries (bID, {$copyFields}) SELECT ?, {$copyFields} FROM btJeroCycleEntries WHERE bID = ?",
+			[
+				$newBID,
+				$this->bID
+			]
+		);
 	}
 
 	public function delete () {
@@ -241,8 +234,8 @@ class Controller extends BlockController {
 				$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, iconfID, linkURL, internalLinkCID, title, description, buttonText, sortOrder) VALUES(?,?,?,?,?,?,?,?,?)',
 					array(
 						$this->bID,
-						intval($args['fID'][$i]),
-						intval($args['iconfID'][$i]),
+						(int) $args['fID'][$i],
+						(int) $args['iconfID'][$i],
 						$linkURL,
 						$internalLinkCID,
 						$args['title'][$i],

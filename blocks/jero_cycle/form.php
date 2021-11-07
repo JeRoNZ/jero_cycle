@@ -3,11 +3,32 @@
 $fp = new Permissions(FileSet::getGlobal());
 $tp = new Permissions();
 
-echo Core::make('helper/concrete/ui')->tabs(array(
-	array('slides', t('Slides'), true),
-	array('options', t('Options')),
-	array('about', t('About'))
-));
+use Concrete\Core\Application\Service\UserInterface;
+use Concrete\Core\Support\Facade\Application;
+use Concrete\Core\Utility\Service\Identifier;
+$app = Application::getFacadeApplication();
+/** @var UserInterface $userInterface */
+$userInterface = $app->make(UserInterface::class);
+/** @var Identifier $id */
+$idHelper = $app->make(Identifier::class);
+
+$id = $idHelper->getString(18);
+
+$v9 = version_compare(\Config::get('concrete.version'), '9.0', '>=');
+
+if ($v9) {
+	echo $userInterface->tabs([
+		['slides-' . $id, t('Slides'), true],
+		['options-' . $id, t('Options')],
+		['about-' . $id, t('About')],
+	]);
+} else {
+	echo Core::make('helper/concrete/ui')->tabs(array(
+		array('slides', t('Slides'), true),
+		array('options', t('Options')),
+		array('about', t('About'))
+	));
+}
 ?>
 
 <script>
@@ -216,7 +237,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 		$('.ccm-image-slider-entries').sortable({
 			placeholder: "ui-state-highlight",
 			axis: "y",
-			handle: "i.fa-arrows",
+			handle: "i.fa-arrows<?= $v9 ? '-alt' : ''?>",
 			cursor: "move",
 			update: function() {
 				doSortCount();
@@ -310,7 +331,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 	.ccm-image-slider-block-container i:hover {
 		color: #428bca;
 	}
-	.ccm-image-slider-block-container i.fa-arrows {
+	.ccm-image-slider-block-container i.fa-arrows<?= $v9 ? '-alt' : ''?> {
 		position: absolute;
 		top: 6px;
 		right: 5px;
@@ -330,7 +351,9 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 	}
 </style>
 
-<div id="ccm-tab-content-slides" class="ccm-tab-content">
+<?= $v9 ? '<div class="tab-content">' : ''?>
+
+<div class="<?= $v9 ? 'tab-pane show active' : 'ccm-tab-content'?>" id="<?= $v9 ? 'slides-'.$id : 'ccm-tab-content-slides' ?>" role="tabpanel">
 	<div class="ccm-image-slider-block-container">
 		<button type="button" class="btn btn-success ccm-add-image-slider-entry"><?php echo t('Add Slide'); ?></button>
 		<div class="ccm-image-slider-entries">
@@ -339,7 +362,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 	</div>
 </div>
 
-<div id="ccm-tab-content-options" class="ccm-tab-content">
+<div class="<?= $v9 ? 'tab-pane' : 'ccm-tab-content'?>" id="<?= $v9 ? 'options-'.$id : 'ccm-tab-content-options' ?>" role="tabpanel">
 	<div style="width:50%;float:left">
 		<label class="control-label"><?php echo t('Navigation'); ?></label>
 		<div class="form-group">
@@ -418,7 +441,7 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 	</div>
 </div>
 
-<div id="ccm-tab-content-about" class="ccm-tab-content">
+<div class="<?= $v9 ? 'tab-pane' : 'ccm-tab-content'?>" id="<?= $v9 ? 'about-'.$id : 'ccm-tab-content-about' ?>" role="tabpanel">
 	<div class="ccm-image-slider-block-container">
 		<label class="control-label"><?php echo t('About')?> Cycle2</label>
 		<p><?php echo t('This addon makes use of the amazing')?> <a target="_blank" href="http://malsup.com/jquery/cycle2/">Cycle2 jQuery plugin</a>. <?php echo t('If you find it awesome, please visit
@@ -426,12 +449,14 @@ echo Core::make('helper/concrete/ui')->tabs(array(
 	</div>
 </div>
 
+<?= $v9 ? '</div>' : ''?>
+
 <script type="text/template" id="imageTemplate">
 	<div class="ccm-image-slider-entry slide-well slide-closed">
 		<div>
-			<button type="button" class="btn btn-default ccm-edit-slide" data-slide-close-text="<?php echo t('Collapse Slide'); ?>" data-slide-edit-text="<?php echo t('Edit Slide'); ?>"><?php echo t('Edit Slide'); ?></button>
+			<button type="button" class="btn btn-default btn-secondary ccm-edit-slide" data-slide-close-text="<?php echo t('Collapse Slide'); ?>" data-slide-edit-text="<?php echo t('Edit Slide'); ?>"><?php echo t('Edit Slide'); ?></button>
 			<button type="button" class="btn btn-danger ccm-delete-image-slider-entry"><?php echo t('Remove'); ?></button>
-			<i class="fa fa-arrows"></i>
+			<i class="fa<?= $v9 ? 's' : ''?> fa-arrows<?= $v9 ? '-alt' : ''?>"></i>
 		</div>
 		<div class="form-group">
 			<div style="width:50%;float:left">

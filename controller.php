@@ -11,14 +11,14 @@ defined('C5_EXECUTE') or die(_("Access Denied."));
 class Controller extends Package {
 	protected $pkgHandle = 'jero_cycle';
 	protected $appVersionRequired = '5.7.5';
-	protected $pkgVersion = '1.0.3';
+	protected $pkgVersion = '1.1';
 
 	public function getPackageName () {
-		return t("Cycle2 Slide Show");
+		return t('Cycle2 Slide Show');
 	}
 
 	public function getPackageDescription () {
-		return t("A mobile friendly responsive image slider using the amazing Cycle2 plugin");
+		return t('A mobile friendly responsive image slider using the amazing Cycle2 plugin');
 	}
 
 	public function install () {

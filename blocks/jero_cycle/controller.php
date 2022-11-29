@@ -111,6 +111,22 @@ class Controller extends BlockController {
 			$this->requireAsset('redactor');
 		}
 		$this->set('effects', $this->effectsList);
+
+		// PHP 8+ fixes
+		$this->set('navigationType', null);
+		$this->set('timeout', null);
+		$this->set('speed', null);
+		$this->set('speed', null);
+		$this->set('effect', null);
+		$this->set('maxZ', null);
+		$this->set('sync', null);
+		$this->set('swipe', null);
+		$this->set('noAnimate', null);
+		$this->set('fadeCaption', null);
+		$this->set('pause', null);
+		$this->set('buttonCSS', null);
+		$this->set('bID', 42);
+		$this->set('rows', []);
 	}
 
 	public function getEntries () {

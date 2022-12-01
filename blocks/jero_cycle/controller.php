@@ -113,7 +113,7 @@ class Controller extends BlockController {
 		$this->set('effects', $this->effectsList);
 
 		// PHP 8+ fixes
-		$this->set('navigationType', null);
+		$this->set('navigationType', 0);
 		$this->set('timeout', null);
 		$this->set('speed', null);
 		$this->set('speed', null);
@@ -208,10 +208,10 @@ class Controller extends BlockController {
 			'timeout' => 4000,
 			'speed' => 500,
 		);
-		$args['timeout'] = intval($args['timeout']);
-		$args['speed'] = intval($args['speed']);
-		$args['maxZ'] = intval($args['maxZ']) < 20 ? 100 : intval($args['maxZ']);
-		$args['navigationType'] = intval($args['navigationType']);
+		$args['timeout'] = (int) $args['timeout'];
+		$args['speed'] = (int) ($args['speed']);
+		$args['maxZ'] = (int) ($args['maxZ']) < 20 ? 100 : intval($args['maxZ']);
+		$args['navigationType'] = isset($args['navigationType']) ?  (int) $args['navigationType'] : 0 ;
 		$args['effect'] = in_array($args['effect'], $this->effectsList) ? $args['effect'] : 'fade';
 		$args['sync'] = isset($args['sync']) ? 1 : 0;
 		$args['noAnimate'] = isset($args['noAnimate']) ? 1 : 0;

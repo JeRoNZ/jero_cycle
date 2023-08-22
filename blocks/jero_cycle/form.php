@@ -133,7 +133,7 @@ if ($v9) {
 			 if ($file) {
 				echo "image_url: '". $file->getThumbnailURL('file_manager_listing'). "',";
 			 	echo "image_dimensions: '".$file->getAttribute('width'). "x".$file->getAttribute('height')."',";
-			 	echo "image_title: '".$file->getTitle()."',";
+			 	echo "image_title: '".h($file->getTitle())."',";
 			 } else { ?>
 			image_url: '',
 			image_dimensions: '',
@@ -148,7 +148,7 @@ if ($v9) {
 			if ($file) {
 				echo "icon_url: '". $file->getThumbnailURL('file_manager_listing'). "',";
 				echo "icon_dimensions: '".$file->getAttribute('width'). "x".$file->getAttribute('height')."',";
-				echo "icon_title: '".$file->getTitle()."',";
+				echo "icon_title: '". h($file->getTitle()) ."',";
 			} 	else { ?>
 			icon_url: '',
 			icon_dimensions: '',

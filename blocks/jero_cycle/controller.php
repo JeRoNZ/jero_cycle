@@ -14,13 +14,13 @@ use Page;
 
 
 class Controller extends BlockController implements FileTrackableInterface {
-	public $helpers = array(
-		0 => 'form',
-	);
-	public $btFieldsRequired = array();
-	protected $btExportFileColumns = array(
+	public $helpers = [
+		0 => 'form'
+	];
+	public $btFieldsRequired = [];
+	protected $btExportFileColumns = [
 		0 => 'image',
-	);
+	];
 	protected $btTable = 'btJeroCycle';
 	protected $btInterfaceWidth = 600;
 	protected $btInterfaceHeight = 600;
@@ -31,7 +31,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 	protected $btDefaultSet = 'multimedia';
 
 	protected $effectsList =
-		array(
+		[
 			'fade' => 'fade',
 			'fadeout' => 'fadeout',
 			'scrollHorz' => 'scrollHorz',
@@ -43,7 +43,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 			'tileSlide' => 'tileSlide',
 			'tileBlind' => 'tileBlind',
 			'carousel' => 'carousel',
-		);
+		];
 
 	public function getBlockTypeDescription () {
 		return t('Yet another image slide show, this one uses the amazing responsive cycle2 plugin');
@@ -55,11 +55,8 @@ class Controller extends BlockController implements FileTrackableInterface {
 
 	public function getSearchableContent () {
 		$content = '';
-		$db = Database::connection();
-		$v = [$this->bID];
-		$q = 'SELECT * FROM btJeroCycleEntries WHERE bID = ?';
-		$r = $db->query($q, $v);
-		foreach ($r as $row) {
+		$rows = $this->_getEntries();
+		foreach ($rows as $row) {
 			$content .= $row['title'] . ' ';
 			$content .= $row['description'] . ' ';
 		}
@@ -67,10 +64,14 @@ class Controller extends BlockController implements FileTrackableInterface {
 		return $content;
 	}
 
-	public function view () {
+	public function on_start () {
 		$uh = $this->app->make('helper/concrete/urls');
 		$bObj = $this->getBlockObject();
+		if (! $bObj) { // this null when adding a new block
+			return;
+		}
 		$bt = $bObj->getBlockTypeObject();
+
 		$blockURL = $uh->getBlockTypeAssetsURL($bt);
 		$this->set("blockURL", $blockURL); // Required for next/previous arrows
 
@@ -102,9 +103,11 @@ class Controller extends BlockController implements FileTrackableInterface {
 				$this->requireAsset('javascript', 'cycle2tile');
 				break;
 		}
+	}
 
+
+	public function view () {
 		$this->set('rows', $this->getEntries());
-
 	}
 
 	public function add () {
@@ -134,7 +137,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 
 	private function _getEntries() {
 		$db = Database::connection();
-		$r = $db->fetchAllAssociative('SELECT * FROM btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+		$r = $db->fetchAllAssociative('SELECT * FROM btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', [$this->bID]);
 
 		return $r;
 	}
@@ -142,7 +145,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 	public function getEntries () {
 		$r = $this->_getEntries();
 		// in view mode, linkURL takes us to where we need to go whether it's on our site or elsewhere
-		$rows = array();
+		$rows = [];
 
 		$ratio = false;
 		foreach ($r as &$q) {
@@ -195,7 +198,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 
 	public function delete () {
 		$db = Database::connection();
-		$db->delete('btImageSliderEntries', array('bID' => $this->bID));
+		$db->delete('btImageSliderEntries', ['bID' => $this->bID]);
 		parent::delete();
 	}
 
@@ -213,10 +216,10 @@ class Controller extends BlockController implements FileTrackableInterface {
 
 
 	public function save ($args) {
-		$args += array(
+		$args += [
 			'timeout' => 4000,
-			'speed' => 500,
-		);
+			'speed' => 500
+		];
 		$args['timeout'] = (int) $args['timeout'];
 		$args['speed'] = (int) ($args['speed']);
 		$args['maxZ'] = (int) ($args['maxZ']) < 20 ? 100 : intval($args['maxZ']);
@@ -230,7 +233,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 		$args['buttonCSS'] = $args['buttonCSS'] ? trim($args['buttonCSS'])  : 'btn btn-default';
 
 		$db = Database::connection();
-		$db->executeQuery('DELETE from btJeroCycleEntries WHERE bID = ?', array($this->bID));
+		$db->executeQuery('DELETE from btJeroCycleEntries WHERE bID = ?', [$this->bID]);
 
 		if (isset($args['sortOrder'])) {
 			$count = count($args['sortOrder']);
@@ -257,7 +260,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 				}
 
 				$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, iconfID, linkURL, internalLinkCID, title, description, buttonText, sortOrder) VALUES(?,?,?,?,?,?,?,?,?)',
-					array(
+					[
 						$this->bID,
 						(int) $args['fID'][$i],
 						(int) $args['iconfID'][$i],
@@ -267,7 +270,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 						$args['description'][$i],
 						$args['buttonText'][$i],
 						$args['sortOrder'][$i]
-					)
+					]
 				);
 				++$i;
 			}

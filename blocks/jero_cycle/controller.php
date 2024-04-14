@@ -5,12 +5,15 @@ defined("C5_EXECUTE") or die("Access Denied.");
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Database\Connection\Connection;
 use Concrete\Core\Editor\LinkAbstractor;
+use Concrete\Core\File\Tracker\FileTrackableInterface;
+use Concrete\Core\Support\Facade\Application;
 use Core;
 use File;
 use Database;
 use Page;
 
-class Controller extends BlockController {
+
+class Controller extends BlockController implements FileTrackableInterface {
 	public $helpers = array(
 		0 => 'form',
 	);
@@ -53,7 +56,7 @@ class Controller extends BlockController {
 	public function getSearchableContent () {
 		$content = '';
 		$db = Database::connection();
-		$v = array($this->bID);
+		$v = [$this->bID];
 		$q = 'SELECT * FROM btJeroCycleEntries WHERE bID = ?';
 		$r = $db->query($q, $v);
 		foreach ($r as $row) {
@@ -65,7 +68,7 @@ class Controller extends BlockController {
 	}
 
 	public function view () {
-		$uh = Core::make('helper/concrete/urls');
+		$uh = $this->app->make('helper/concrete/urls');
 		$bObj = $this->getBlockObject();
 		$bt = $bObj->getBlockTypeObject();
 		$blockURL = $uh->getBlockTypeAssetsURL($bt);
@@ -129,9 +132,15 @@ class Controller extends BlockController {
 		$this->set('rows', []);
 	}
 
-	public function getEntries () {
+	private function _getEntries() {
 		$db = Database::connection();
-		$r = $db->fetchAll('SELECT * FROM btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+		$r = $db->fetchAllAssociative('SELECT * FROM btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+
+		return $r;
+	}
+
+	public function getEntries () {
+		$r = $this->_getEntries();
 		// in view mode, linkURL takes us to where we need to go whether it's on our site or elsewhere
 		$rows = array();
 
@@ -175,7 +184,7 @@ class Controller extends BlockController {
 		parent::duplicate($newBID);
 		$db = $this->app->make(Connection::class);
 		$copyFields = 'fID, iconfID, linkURL, title, description, sortOrder, internalLinkCID, buttonText';
-		$db->executeUpdate(
+		$db->executeStatement(
 			"INSERT INTO btJeroCycleEntries (bID, {$copyFields}) SELECT ?, {$copyFields} FROM btJeroCycleEntries WHERE bID = ?",
 			[
 				$newBID,
@@ -197,7 +206,7 @@ class Controller extends BlockController {
 			$this->requireAsset('redactor');
 		}
 		$db = Database::connection();
-		$query = $db->FetchAll('SELECT * from btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
+		$query = $db->fetchAllAssociative('SELECT * from btJeroCycleEntries WHERE bID = ? ORDER BY sortOrder', array($this->bID));
 		$this->set('rows', $query);
 		$this->set('effects', $this->effectsList);
 	}
@@ -222,7 +231,7 @@ class Controller extends BlockController {
 
 		$db = Database::connection();
 		$db->executeQuery('DELETE from btJeroCycleEntries WHERE bID = ?', array($this->bID));
-		parent::save($args);
+
 		if (isset($args['sortOrder'])) {
 			$count = count($args['sortOrder']);
 			$i = 0;
@@ -263,9 +272,26 @@ class Controller extends BlockController {
 				++$i;
 			}
 		}
+
+		parent::save($args);
 	}
 
 	public function composer () {
 		$this->edit();
+	}
+
+	public function getUsedFiles()
+	{
+		$files = [];
+		$rows = $this->_getEntries();
+		foreach ($rows as $r){
+			if ($r['fID'] > 0) {
+				$files[] = $r['fID'];
+			}
+			if ($r['iconfID'] > 0){
+				$files[] = $r['iconfID'];
+			}
+		}
+		return $files;
 	}
 }

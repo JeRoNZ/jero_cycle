@@ -455,7 +455,7 @@ if ($v9) {
 	<div class="ccm-image-slider-entry slide-well slide-closed">
 		<div>
 			<button type="button" class="btn btn-default btn-secondary ccm-edit-slide" data-slide-close-text="<?php echo t('Collapse Slide'); ?>" data-slide-edit-text="<?php echo t('Edit Slide'); ?>"><?php echo t('Edit Slide'); ?></button>
-			<button type="button" class="btn btn-danger ccm-delete-image-slider-entry"><?php echo t('Remove'); ?></button>
+			<button type="button" class="btn btn-danger ccm-delete-image-slider-entry"><?php echo t('Remove'); ?></button>&nbsp;&nbsp;(<%= image_title %>)
 			<i class="fa<?= $v9 ? 's' : ''?> fa-arrows<?= $v9 ? '-alt' : ''?>"></i>
 		</div>
 		<div class="form-group">

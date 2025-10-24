@@ -140,7 +140,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 		$this->set('navigationType', 0);
 		$this->set('timeout', null);
 		$this->set('speed', null);
-		$this->set('speed', null);
+		$this->set('preload', null);
 		$this->set('effect', null);
 		$this->set('maxZ', null);
 		$this->set('sync', null);

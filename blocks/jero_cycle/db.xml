@@ -22,6 +22,9 @@
         <field name="noAnimate" type="integer">
             <unsigned/>
         </field>
+        <field name="preload" type="integer">
+            <unsigned/>
+        </field>
         <field name="pause" type="integer">
             <unsigned/>
         </field>

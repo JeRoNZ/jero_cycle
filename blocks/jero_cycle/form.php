@@ -433,6 +433,10 @@ if ($v9) {
 			<?php echo $form->label('pause', t('Pause Slideshow on Hover')); ?>
 			<?php echo $form->checkbox('pause', $pause, $pause ? 'checked' : ''); ?>
 		</div>
+        <div class="form-group">
+			<?php echo $form->label('preload', t('Preload images')); ?>
+			<?php echo $form->checkbox('preload', $preload, $preload ? 'checked' : ''); ?>
+        </div>
 		<div class="form-group">
 			<?php echo $form->label('buttonCSS', t('Button CSS classes')); ?>
 			<?php echo $form->text('buttonCSS', ($buttonCSS ? $buttonCSS : 'btn btn-default')); ?>

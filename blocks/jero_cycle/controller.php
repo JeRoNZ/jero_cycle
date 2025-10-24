@@ -5,6 +5,7 @@ defined("C5_EXECUTE") or die("Access Denied.");
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Database\Connection\Connection;
 use Concrete\Core\Editor\LinkAbstractor;
+use Concrete\Core\File\Event\FileVersion;
 use Concrete\Core\File\Tracker\FileTrackableInterface;
 use Concrete\Core\Support\Facade\Application;
 use Core;
@@ -102,6 +103,23 @@ class Controller extends BlockController implements FileTrackableInterface {
 			case 'tileBlind':
 				$this->requireAsset('javascript', 'cycle2tile');
 				break;
+		}
+
+		if ($sets['preload']){
+			$rows = $this->_getEntries();
+			if ($rows) {
+				foreach ($rows as $r) {
+					$fID = $r['fID'];
+					if ($fID) {
+						$f = File::getByID($fID);
+						if ($f) {
+							$url = $f->getVersion()->getURL();
+							$mime = $f->getVersion()->getMimeType();
+							$this->addHeaderItem('<link rel="preload" fetchpriority="high" as="image" href="' . $url . '" type="' . $mime . '">');
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -228,6 +246,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 		$args['sync'] = isset($args['sync']) ? 1 : 0;
 		$args['noAnimate'] = isset($args['noAnimate']) ? 1 : 0;
 		$args['pause'] = isset($args['pause']) ? 1 : 0;
+		$args['preload'] = isset($args['preload']) ? 1 : 0;
 		$args['fadeCaption'] = isset($args['fadeCaption']) ? 1 : 0;
 		$args['swipe'] = isset($args['swipe']) ? 1 : 0;
 		$args['buttonCSS'] = $args['buttonCSS'] ? trim($args['buttonCSS'])  : 'btn btn-default';

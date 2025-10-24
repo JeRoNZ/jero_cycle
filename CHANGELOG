@@ -1,3 +1,5 @@
+1.2.2 Option to preload the images
+
 1.2.1 Load assets from on_start rather than view
 
 1.2   Implment FileTrackableInterface so that file usage shows in the dashboard. Requires >= V9.2

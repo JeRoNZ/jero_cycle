@@ -105,7 +105,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 				break;
 		}
 
-		if ($sets['preload']){
+		if (array_key_exists('preload', $sets) && $sets['preload']){
 			$rows = $this->_getEntries();
 			if ($rows) {
 				foreach ($rows as $r) {

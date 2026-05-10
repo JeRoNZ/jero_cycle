@@ -40,7 +40,7 @@ if ($effect == 'continuous') {
 	<?php  } ?>
 	data-cycle-max-z="<?php  echo $maxZ?>"
 
-	 data-cycle-overlay-template='<div class="cycle-caption" style="z-index:<?php  echo $maxZ ? $maxZ +10 : 110?>">{{h2link}}<h4>{{desc}}</h4><span class="<?php  echo $buttonCSS ? $buttonCSS : 'btn btn-default' ?>"><a class="{{hiddenclass}}" href="{{link}}">{{buttontext}}</a></span></div>'
+	 data-cycle-overlay-template='<div class="cycle-caption" style="z-index:<?php  echo $maxZ ? $maxZ +10 : 110?>">{{h2link}}{{subtitle}}<h4>{{desc}}</h4><span class="<?php  echo $buttonCSS ? $buttonCSS : 'btn btn-default' ?>"><a class="{{hiddenclass}}" href="{{link}}">{{buttontext}}</a></span></div>'
 	 data-cycle-auto-height="calc">
 	<div class="cycle-overlay"></div>
 	<?php 
@@ -64,6 +64,7 @@ if ($effect == 'continuous') {
 			$first = true;
 			?>
 			data-cycle-title="<?php  echo h($row['title']) ?>"
+			 data-cycle-subtitle="<?php echo $row['subtitle'] ? '<p class=\'cycle-subtitle\'>' . h($row['subtitle']) . '</p>' : '' ?>"
 			 data-cycle-desc="<?php  echo h($row['description']) ?>"
 			<?php 
 			if ($row['linkURL']) {

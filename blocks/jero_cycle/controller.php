@@ -59,6 +59,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 		$rows = $this->_getEntries();
 		foreach ($rows as $row) {
 			$content .= $row['title'] . ' ';
+			$content .= $row['subtitle'] . ' ';
 			$content .= $row['description'] . ' ';
 		}
 
@@ -204,7 +205,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 	{
 		parent::duplicate($newBID);
 		$db = $this->app->make(Connection::class);
-		$copyFields = 'fID, iconfID, linkURL, title, description, sortOrder, internalLinkCID, buttonText';
+		$copyFields = 'fID, iconfID, linkURL, title, subtitle, description, sortOrder, internalLinkCID, buttonText';
 		$db->executeStatement(
 			"INSERT INTO btJeroCycleEntries (bID, {$copyFields}) SELECT ?, {$copyFields} FROM btJeroCycleEntries WHERE bID = ?",
 			[
@@ -278,7 +279,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 					$args['description'][$i] = LinkAbstractor::translateTo($args['description'][$i]);
 				}
 
-				$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, iconfID, linkURL, internalLinkCID, title, description, buttonText, sortOrder) VALUES(?,?,?,?,?,?,?,?,?)',
+				$db->executeQuery('INSERT INTO btJeroCycleEntries (bID, fID, iconfID, linkURL, internalLinkCID, title, subtitle, description, buttonText, sortOrder) VALUES(?,?,?,?,?,?,?,?,?,?)',
 					[
 						$this->bID,
 						(int) $args['fID'][$i],
@@ -286,6 +287,7 @@ class Controller extends BlockController implements FileTrackableInterface {
 						$linkURL,
 						$internalLinkCID,
 						$args['title'][$i],
+						$args['subtitle'][$i],
 						$args['description'][$i],
 						$args['buttonText'][$i],
 						$args['sortOrder'][$i]

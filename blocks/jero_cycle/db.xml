@@ -66,6 +66,7 @@
             <default value="0"/>
         </field>
         <field name="title" type="string" size="100"/>
+        <field name="subtitle" type="string" size="255"/>
         <field name="description" type="text"/>
         <field name="buttonText" type="string" size="100"/>
         <field name="sortOrder" type="integer"/>

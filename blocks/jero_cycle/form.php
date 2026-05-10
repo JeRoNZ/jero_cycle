@@ -158,6 +158,7 @@ if ($v9) {
 			link_url: '<?php echo $row['linkURL']; ?>',
 			link_type: '<?php echo $linkType; ?>',
 			title: '<?php echo addslashes(h($row['title'])); ?>',
+			subtitle: '<?php echo addslashes(h($row['subtitle'])); ?>',
 			description: '<?php echo str_replace(array("\t", "\r", "\n"), "", addslashes(h($row['description']))); ?>',
 			buttonText: '<?php echo h($row['buttonText']); ?>',
 			sort_order: '<?php echo $row['sortOrder']; ?>'
@@ -177,6 +178,7 @@ if ($v9) {
 				fID: '',
 				iconfID: '',
 				title: '',
+				subtitle: '',
 				link_url: '',
 				cID: '',
 				description: '',
@@ -495,6 +497,10 @@ if ($v9) {
 		<div class="form-group" style="clear: left">
 			<label><?php echo t('Title'); ?></label>
 			<input type="text" name="<?php echo $view->field('title'); ?>[]" value="<%=title%>" />
+		</div>
+		<div class="form-group">
+			<label><?php echo t('Subtitle'); ?></label>
+			<input type="text" name="<?php echo $view->field('subtitle'); ?>[]" value="<%=subtitle%>" />
 		</div>
 		<div class="form-group" >
 			<label><?php echo t('Description'); ?></label>

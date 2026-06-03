@@ -130,9 +130,9 @@ class Controller extends BlockController implements FileTrackableInterface {
 	}
 
 	public function add () {
-		$this->requireAsset('core/file-manager');
-		$this->requireAsset('core/sitemap');
 		if (version_compare(\Config::get('concrete.version'), '8.0', '<')) {
+			$this->requireAsset('core/file-manager');
+			$this->requireAsset('core/sitemap');
 			$this->requireAsset('redactor');
 		}
 		$this->set('effects', $this->effectsList);
@@ -260,8 +260,8 @@ class Controller extends BlockController implements FileTrackableInterface {
 			$i = 0;
 
 			while ($i < $count) {
-				$linkURL = $args['linkURL'][$i];
-				$internalLinkCID = $args['internalLinkCID'][$i];
+				$linkURL = $args['linkURL'][$i] ?? 0;
+				$internalLinkCID = $args['internalLinkCID'][$i] ?? 0;
 				switch (intval($args['linkType'][$i])) {
 					case 1:
 						$linkURL = '';
